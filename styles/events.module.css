@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Laila:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
 
 @font-face {
     font-family: 'SF Ironsides'; /* Name for the font */
@@ -15,21 +17,53 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-color: #000;
+    position: relative;
+}
+
+.mainContainer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-image: 
-    radial-gradient(
+        radial-gradient(
             circle at center, 
-            rgba(255, 255, 255, 0.2) 0%, /* Brighter center */
-            rgba(0, 0, 0, 1) 70%, /* Darker towards the edges */
-            rgba(0, 0, 0, 1) 100% /* Fully black at the edges */
+            rgba(255, 255, 255, 0.1) 0%, /* Lighter center */
+            rgba(0, 0, 0, 0.3) 70%, /* Much lighter towards the edges */
+            rgba(0, 0, 0, 0.5) 100% /* Semi-transparent at the edges */
         ),
-    url("/events/bgImg.png"); /* Add your image */
+        url("/events/new_bg.png"); /* First page background only */
+    background-position: 
+        center 0px, /* Radial gradient position */
+        center 0px; /* First page background at top */
+    background-repeat: 
+        no-repeat, /* Radial gradient doesn't repeat */
+        no-repeat; /* First page background doesn't repeat */
+    background-size: 
+        1280px 831px, /* Radial gradient size - only first page */
+        1280px 831px; /* First page background size */
+    background-blend-mode: overlay, normal;
+    pointer-events: none;
+    z-index: 0;
+}
 
-    background-position: center 120px; /* Center the images horizontally */
-    background-repeat: repeat-y; /* Repeat images in the Y-direction */
-    background-size: 1200px 838.941px; /* Set the image dimensions */
-    background-blend-mode: overlay; /* Blend the image with the black background */
-
-   
+.mainContainer::after {
+    content: '';
+    position: absolute;
+    top: 1031px; /* 831px (first page) + 200px padding from top */
+    padding-bottom: 200px;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 1031px);
+    background-image: url("/events/circle.png");
+    background-position: center top;
+    background-repeat: repeat-y;
+    background-size: 550px auto; /* Width 550px, Height 900px creates spacing between circles */
+    pointer-events: none;
+    z-index: 0;
 }
 
 
@@ -37,9 +71,9 @@
     margin: 0;
     display: flex;
     flex-direction: column;
-   
+    position: relative;
+    z-index: 1;
     align-items: center;
-    padding-top: 12vh;
     transition: opacity 0.5s ease-in-out;
     width: 90vw;
     margin-bottom: 40px;
@@ -48,12 +82,81 @@
 
 
 
+.featuredEventsSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+    margin-top: 30px;
+    margin-bottom: 100px;
+    width: 100%;
+    max-width: 1065px;
+}
+
+.featuredCard {
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.featuredCard:hover {
+    filter: grayscale(0%) !important;
+    transform: scale(1.01);
+}
+
+.featuredCard:hover :global(.imageWrap) {
+    border: 2px solid #9333EA;
+}
+
 .searchContainer{
     width: 90%;
     display: flex;
     justify-content: space-around;
-    margin-top: 36px;
+    margin-top: 37px;
 }
+
+.searchWrapper {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin-top: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.searchBackground {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.searchInput {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    background: transparent;
+    border: none;
+    color: #FFF;
+    font-family: "Laila", serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+    text-align: center;
+    outline: none;
+}
+
+.searchInput::placeholder {
+    color: #FFFFFF;
+    opacity: 0.8;
+}
+
+.searchInput:focus {
+    outline: none;
+    border: none;
+}
+
 .searchbox {
     display: flex;
     width: 610px;
@@ -61,21 +164,17 @@
     justify-content: space-between;
     align-items: center;
     transition: opacity 0.5s ease-in-out;
-    border-bottom: 1px solid var(--Color-Primary500, #50FF00);
-    background: #000;
-
-    /* My Shadow 2 */
-    box-shadow: 4.123px -104.442px 29.546px 0px rgba(0, 0, 0, 0.02), 2.748px -66.651px 26.798px 0px rgba(0, 0, 0, 0.15), 1.374px -37.792px 22.675px 0px rgba(0, 0, 0, 0.50), 0.687px -16.491px 16.491px 0px rgba(0, 0, 0, 0.85), 0px -4.123px 8.933px 0px rgba(0, 0, 0, 0.98);
-    backdrop-filter: blur(30.920454025268555px);
+    border-bottom: 1px solid #FFB6C1;
+    background: transparent;
 }
 .searchbar {
    
     flex-grow: 1;
     color: #FFF;
-    background-color: #000;
+    background-color: transparent;
     border: none;
-    /* La/La - 20 Reg */
-    font-family: "Laila", serif;
+    /* Cormorant Garamond */
+    font-family: "Cormorant Garamond", serif;
     font-size: 20px;
     font-style: normal;
     font-weight: 400;
@@ -159,7 +258,32 @@ flex-shrink: 0;
 .titleBox {
     display: flex;
     flex-direction: column;
+    padding-top:200px;
     gap: 34px;
+    align-items: center;
+    justify-content: center;
+}
+
+.titleText {
+    width: 476px;
+    height: 48px;
+    color: var(--Color-Primary500, white);
+    text-align: center;
+    font-family: "DM Serif Display", serif;
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 48px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.titleImage {
+    width: 476px;
+    height: 48px;
+    object-fit: contain;
 }
 
 .centergroup {
@@ -203,14 +327,38 @@ flex-shrink: 0;
     transition: opacity 0.5s ease-in-out;
 } */
 
-.cardContainer {
+.eventsPanel {
+    width: 1065px;
+    height: 3237px;
     display: flex;
-    flex-wrap: wrap; /* Allow wrapping of items to the next row */
-    justify-content: center; /* Add spacing between items */
-    ; /* Space between grid items */
+    flex-direction: column;
+    align-items: center;
+    padding:0px 20px 40px 20px; /* Top padding for EVENTS title */
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1;
+}
+
+.eventsPanelTitle {
+    color: #FFF;
+    text-align: center;
+    font-family: "DM Serif Display", serif;
+    font-size: 64px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 64px;
+    text-transform: uppercase;
+    margin-bottom: 60px;
+    width: 100%;
+}
+
+.cardContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
     gap: 32px;
+    width: 100%;
     max-width: 1065px;
-    margin-top: 63px;
+    justify-items: center;
 }
 
 
@@ -233,6 +381,8 @@ flex-shrink: 0;
     margin-top: 100px;
     width: 90vw;
     align-items: center;
+    position: relative;
+    z-index: 1;
 }
 
 .workshoptitletext{
@@ -296,6 +446,8 @@ flex-shrink: 0;
     display: flex;
     width: 100%;
     padding-bottom: 48px;
+    position: relative;
+    z-index: 1;
 }
 .sponsors_title{
     display: inline-flex;
@@ -417,6 +569,16 @@ flex-shrink: 0;
     .leftgroup{
         display: none;
     }
+    
+    .searchWrapper {
+        max-width: 90%;
+        margin-top: 100px;
+    }
+    
+    .searchInput {
+        width: 80%;
+        font-size: 18px;
+    }
 }
 
 @media screen and (max-width: 550px) {
@@ -427,5 +589,19 @@ flex-shrink: 0;
     .searchbox{
         width: 100%;
     }
+    
+    .searchWrapper {
+        max-width: 95%;
+        margin-top: 80px;
+    }
+    
+    .searchInput {
+        width: 85%;
+        font-size: 16px;
+    }
+    
+    .titleImage {
+        max-width: 90%;
+    }
    
-}
+}   

@@ -22,23 +22,18 @@ height: 358.481px;
 flex-shrink: 0;
 border-radius: 8px;
 background: #FFF;
-mix-blend-mode: luminosity;
 display: flex;
 justify-content: center;
 align-items: flex-end;
 padding-bottom: 33px;
-filter: grayscale(100%);
 transition: transform 0.3s ease, filter 0.3s ease; /* Add smooth transition */
 position: relative; /* Ensures innerShadow is properly positioned */
 }
 
 .imageWrap:hover{
 	transform: scale(1.10); /* Slightly zoom on hover */
-    filter: grayscale(0%); /* Remove grayscale filter */
     border-radius: 7.357px; /* Slightly reduce border radius */
-	
-	mix-blend-mode: normal;
-	border: 2px solid #50ff00; /* Add a green solid border */
+	border: 2px solid #9333EA; /* Purple border on hover */
     transition: all 0.3s ease; /* Smooth transition for all changes */
 
 }

@@ -184,64 +184,94 @@ const Modal = (props) => {
                         </div>
                         <div className={styles.modal_body}>
                             <div className={styles.date_venue}>
-                                <span className={styles.date_text}>Date:</span>
-                                <span className={styles.date_value}>
-                                    {props.body.start_time.substring(5, 7) !==
-                                    props.body.end_time.substring(5, 7) ? (
-                                        <>
-                                            {' '}
+                                {/* Display Date - handle both API format (start_time/end_time) and JSON format (Date) */}
+                                {(props.body.start_time && props.body.end_time) ? (
+                                    <>
+                                        <span className={styles.date_text}>Date:</span>
+                                        <span className={styles.date_value}>
+                                            {props.body.start_time.substring(5, 7) !==
+                                            props.body.end_time.substring(5, 7) ? (
+                                                <>
+                                                    {' '}
+                                                    {new Date(
+                                                        props.body.start_time
+                                                    ).toLocaleString('default', {
+                                                        day: 'numeric',
+                                                    })}{' '}
+                                                    {new Date(
+                                                        props.body.start_time
+                                                    ).toLocaleString('default', {
+                                                        month: 'long',
+                                                    })}
+                                                    {' - '}
+                                                </>
+                                            ) : (
+                                                <>
+                                                    {props.body.start_time.substring(
+                                                        8,
+                                                        10
+                                                    ) !==
+                                                    props.body.end_time.substring(
+                                                        8,
+                                                        10
+                                                    ) ? (
+                                                        <>
+                                                            {new Date(
+                                                                props.body.start_time
+                                                            ).toLocaleString(
+                                                                'default',
+                                                                {
+                                                                    day: 'numeric',
+                                                                }
+                                                            )}
+                                                            {' - '}
+                                                        </>
+                                                    ) : null}
+                                                </>
+                                            )}
                                             {new Date(
-                                                props.body.start_time
+                                                props.body.end_time
                                             ).toLocaleString('default', {
                                                 day: 'numeric',
                                             })}{' '}
                                             {new Date(
-                                                props.body.start_time
+                                                props.body.end_time
                                             ).toLocaleString('default', {
                                                 month: 'long',
                                             })}
-                                            {' - '}
-                                        </>
-                                    ) : (
-                                        <>
-                                            {props.body.start_time.substring(
-                                                8,
-                                                10
-                                            ) !==
-                                            props.body.end_time.substring(
-                                                8,
-                                                10
-                                            ) ? (
-                                                <>
-                                                    {new Date(
-                                                        props.body.start_time
-                                                    ).toLocaleString(
-                                                        'default',
-                                                        {
-                                                            day: 'numeric',
-                                                        }
-                                                    )}
-                                                    {' - '}
-                                                </>
-                                            ) : null}
-                                        </>
-                                    )}
-                                    {new Date(
-                                        props.body.end_time
-                                    ).toLocaleString('default', {
-                                        day: 'numeric',
-                                    })}{' '}
-                                    {new Date(
-                                        props.body.end_time
-                                    ).toLocaleString('default', {
-                                        month: 'long',
-                                    })}
-                                </span>
-                                <br />
-                                <span className={styles.date_text}>Venue:</span>
-                                <span className={styles.date_value}>
-                                    {props.body.venue}
-                                </span>
+                                        </span>
+                                        <br />
+                                    </>
+                                ) : props.body.Date ? (
+                                    <>
+                                        <span className={styles.date_text}>Date:</span>
+                                        <span className={styles.date_value}>
+                                            {props.body.Date}
+                                        </span>
+                                        <br />
+                                    </>
+                                ) : null}
+                                
+                                {/* Display Time if available */}
+                                {props.body.Time && (
+                                    <>
+                                        <span className={styles.date_text}>Time:</span>
+                                        <span className={styles.date_value}>
+                                            {props.body.Time}
+                                        </span>
+                                        <br />
+                                    </>
+                                )}
+                                
+                                {/* Display Venue */}
+                                {(props.body.venue || props.body.Venue) && (
+                                    <>
+                                        <span className={styles.date_text}>Venue:</span>
+                                        <span className={styles.date_value}>
+                                            {props.body.venue || props.body.Venue}
+                                        </span>
+                                    </>
+                                )}
                             </div>
                             <p
                                 dangerouslySetInnerHTML={{
@@ -250,18 +280,20 @@ const Modal = (props) => {
                                 className={styles.description}
                             />
                             <div className={styles.team_pay}>
-                                <div style={{ fontWeight: '600' }}>
-                                    {/* <img src="/assets/team.svg" /> */}
-                                    {props.body.max_team_size === 1
-                                        ? 'Individual Participation'
-                                        : props.body.min_team_size ===
-                                          props.body.max_team_size
-                                        ? props.body.min_team_size + ' members'
-                                        : props.body.min_team_size +
-                                          ' - ' +
-                                          props.body.max_team_size +
-                                          ' members'}
-                                </div>
+                                {props.body.max_team_size ? (
+                                    <div style={{ fontWeight: '600' }}>
+                                        {/* <img src="/assets/team.svg" /> */}
+                                        {props.body.max_team_size === 1
+                                            ? 'Individual Participation'
+                                            : props.body.min_team_size ===
+                                              props.body.max_team_size
+                                            ? props.body.min_team_size + ' members'
+                                            : props.body.min_team_size +
+                                              ' - ' +
+                                              props.body.max_team_size +
+                                              ' members'}
+                                    </div>
+                                ) : null}
                                 {props.body.registration_fee ? (
                                     !userData.isAuth ||
                                     userData.state.user.user_type !==

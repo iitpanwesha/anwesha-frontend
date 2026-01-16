@@ -12,7 +12,33 @@ import EventItem from '../components/EventItem'
 import eventsDetails from '../public/events/events_data.json' assert { type: 'json' };
 import Modal from '../components/BigModal/index.js'
 
-
+// Static array of 24 events from public/events folder
+const staticEventsData = [
+    { "Event Name": "Animecon", "poster": '/events/Animecon.png' },
+    { "Event Name": "arTEEst", "poster": '/events/Arteest.png' },
+    { "Event Name": "Bespoke", "poster": '/events/Bespoke.png' },
+    { "Event Name": "Chronoshift", "poster": '/events/Chronoshift.png' },
+    { "Event Name": "Comedy Crunch", "poster": '/events/Comedy Crunch.png' },
+    { "Event Name": "Cook off", "poster": '/events/Cook off.png' },
+    { "Event Name": "Darpan", "poster": '/events/Darpan.png' },
+    { "Event Name": "Ekal", "poster": '/events/ekal.png' },
+    { "Event Name": "Escape Room", "poster": '/events/Escape Room.png' },
+    { "Event Name": "Heelturn(solo-duet and group)", "poster": '/events/Heel Turn.png' },
+    { "Event Name": "Imagination Station", "poster": '/events/imagination.png' },
+    { "Event Name": "IncorporARTion", "poster": '/events/incorpration.png' },
+    { "Event Name": "Kalapravah", "poster": '/events/kalapravah.png' },
+    { "Event Name": "Maidan-e-jung", "poster": '/events/Maidan -e- jung.png' },
+    { "Event Name": "Mixology", "poster": '/events/Mixology.png' },
+    { "Event Name": "Mr-Ms Anwesha", "poster": '/events/MRMS.png' },
+    { "Event Name": "Parakh", "poster": '/events/parakh.png' },
+    { "Event Name": "ProtoUI", "poster": '/events/proroUI.png' },
+    { "Event Name": "Reelverse", "poster": '/events/reelverse.png' },
+    { "Event Name": "Satanz Tantrum", "poster": '/events/Satanz Tantrum.png' },
+    { "Event Name": "Silent Expo", "poster": '/events/silent expo.png' },
+    { "Event Name": "Step Up", "poster": '/events/step up.png' },
+    { "Event Name": "Syngphony", "poster": '/events/syngphony.png' },
+    { "Event Name": "Verve", "poster": '/events/Verve.png' },
+];
 
 const workshopcardarr = [{
     "Event Name": "techgyan x Anwesha",
@@ -101,46 +127,59 @@ const Events = () => {
     ];
 
 
-    const [events, setEvents] = useState([]);
-    const [filteredEvents, setFilteredEvents] = useState([]); // Manages the filtered events
-    useEffect(() => {
-        let host = process.env.NEXT_PUBLIC_HOST
+    // Create a mapping of event names to poster paths (case-insensitive)
+    const posterMap = {};
+    staticEventsData.forEach(event => {
+        // Use lowercase keys for case-insensitive matching
+        posterMap[event["Event Name"].toLowerCase()] = event["poster"];
+    });
 
-        async function callAPI() {
-            try {
-                const res = await fetch(`${host}/event/allevents`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                })
-                const data = await res.json()
-                let result = data.filter((event) => {
-                    if (exceludedEvents.includes(event.id)) {
-                        return false
-                    }
-                    return true
-                })
-                setEvents(result)
-                setFilteredEvents(result)
-            } catch (e) {
-                console.log('Failed to fetch')
-            }
+    // Filter eventsDetails to only include the 24 events that have posters
+    // This removes duplicates and online-only events
+    const validEventNames = new Set(staticEventsData.map(e => e["Event Name"].toLowerCase()));
+    const uniqueEvents = [];
+    const seenEvents = new Set();
+    
+    eventsDetails.forEach(event => {
+        const eventNameLower = event["Event Name"].toLowerCase();
+        // Only include if it's in our poster list and we haven't seen it yet
+        if (validEventNames.has(eventNameLower) && !seenEvents.has(eventNameLower)) {
+            seenEvents.add(eventNameLower);
+            uniqueEvents.push(event);
         }
-        callAPI()
-    }, [])
+    });
+
+    // Merge with poster information
+    const eventsWithPosters = uniqueEvents.map(event => ({
+        ...event,
+        poster: posterMap[event["Event Name"].toLowerCase()] || '/events/poster.png'
+    }));
+
+    const [events, setEvents] = useState(eventsWithPosters);
+    const [filteredEvents, setFilteredEvents] = useState(eventsWithPosters); // Manages the filtered events
+    //console.log(eventsWithPosters.length);
+    // No need for API fetch - using static data from public folder
 
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [selectedEvent, setSelectedEvent] = useState(null)
     const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+    const [isSearching, setIsSearching] = useState(false);
+    
     const handleSearch = (e) => {
-        const query = e.target.value.toLowerCase();
+        const query = e.target.value;
         setSearchQuery(query);
-        setFilteredEvents(
-            events.filter((event) =>
-                event.name.toLowerCase().includes(query)
-            )
-        );
+        
+        if (query.trim() === '') {
+            setIsSearching(false);
+            setSearchResults([]);
+        } else {
+            setIsSearching(true);
+            const results = eventsWithPosters.filter((event) =>
+                event['Event Name'].toLowerCase().includes(query.toLowerCase())
+            );
+            setSearchResults(results);
+        }
     };
 
 
@@ -164,20 +203,10 @@ const Events = () => {
             </Head>
 
             <div className={styles.container}>
-                <div className={styles.textLinkContainer}>
-                    <a href="https://drive.google.com/file/d/13W7BuZjPRJdQPMkST3cp49r-L3qA3nZ-/view?usp=drivesdk" className={styles.textLink} target="_blank">
-                    How to register for Events</a>
-                </div>
                 <div className={styles.titleBox}>
-                    <div className={styles.centergroup}>
-                        <img src="/events/center_material.svg" alt="" />
-                    </div>
-                    <div className={styles.titletext}>EXPLORE THE EVENTS</div>
+                    <div className={styles.titleText}>EXPLORE THE EVENTS</div>
                 </div>
                 <div className={`${styles.searchContainer}`}>
-                    <div className={styles.leftgroup}>
-                        <img src="/events/left_material.svg" alt="" />
-                    </div>
                     <div className={`${styles.searchbox}`}>
                         <input
                             className={styles.searchbar}
@@ -188,13 +217,60 @@ const Events = () => {
                         />
                         <img src="/events/search_icon.svg" alt="" />
                     </div>
-                    <div className={styles.rightgroup}>
-                        <img src="/events/right_material.svg" alt="" />
+                </div>
+
+                {/* Featured Events Section - Below Search Bar on First Page */}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+                    {isSearching && searchResults.length === 0 && (
+                        <div style={{ color: 'white', fontSize: '24px', textAlign: 'center', width: '100%', marginBottom: '5px' , marginTop:'20px' }}>
+                            No events found
+                        </div>
+                    )}
+                    <div className={styles.featuredEventsSection}>
+                        {isSearching && searchResults.length > 0 ? (
+                            // Show search results
+                            searchResults.slice(0, 3).map((item, idx) => (
+                                <div key={idx} className={styles.featuredCard} style={{ filter: 'grayscale(100%)' }}>
+                                    <Card
+                                        onClick={() => openModal(item)}
+                                        event={item}
+                                        closeHandler={closeModal}
+                                    />
+                                </div>
+                            ))
+                        ) : (
+                            // Default 3 featured cards (shown when not searching OR when no results)
+                            <>
+                                <div className={styles.featuredCard} style={{ filter: 'grayscale(100%)' }}>
+                                    <Card
+                                        onClick={() => openModal(eventsWithPosters[0])}
+                                        event={eventsWithPosters[0]}
+                                        closeHandler={closeModal}
+                                    />
+                                </div>
+                                <div className={styles.featuredCard} style={{ filter: 'grayscale(100%)' }}>
+                                    <Card
+                                        onClick={() => openModal(eventsWithPosters[3])}
+                                        event={eventsWithPosters[3]}
+                                        closeHandler={closeModal}
+                                    />
+                                </div>
+                                <div className={styles.featuredCard} style={{ filter: 'grayscale(100%)' }}>
+                                    <Card
+                                        onClick={() => openModal(eventsWithPosters[1])}
+                                        event={eventsWithPosters[1]}
+                                        closeHandler={closeModal}
+                                    />
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
 
+                <div className={styles.eventsPanel}>
+                <div className={styles.eventsPanelTitle}>EVENTS</div>
                 <div className={styles.cardContainer}>
-                    {filteredEvents.map((item, idx) => (
+                    {eventsWithPosters.map((item, idx) => (
                         <Card
                             onClick={() => openModal(item)}
                             key={idx}
@@ -203,28 +279,15 @@ const Events = () => {
                         />
                     ))}
                 </div>
+            </div>
                 {isModalOpen && (
                     <Modal
-                        title={selectedEvent.name.split('#')[0]}
+                        title={selectedEvent["Event Name"].split('#')[0]}
                         body={selectedEvent}
                         closeHandler={closeModal}
                     />
                 )}
             </div>
-
-            <div className={styles.workshopContainer}>
-                <div className={styles.workshoptitletext}>Workshops</div>
-                <div className={styles.cardContainer}>
-                    {workshopcardarr.map((item, idx) => (
-                        <Card
-                            onClick={handleWorkshopNavigation}
-                            key={idx}
-                            event={item}
-                        />
-                    ))}
-                </div>
-            </div>
-
 
             {/* Sponsors */}
             <section className={styles.sponsors}>
