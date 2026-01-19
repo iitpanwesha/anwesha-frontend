@@ -178,3 +178,38 @@
     }
   }
 /* vi: set et sw=4: */
+
+/* ✅ TV Wrapper (New Gallery Content) */
+.tvWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* ✅ This pushes TV below the fullscreen fixed hero overlay */
+  padding-top: 120vh;
+  padding-bottom: 90px;
+
+  position: relative;
+  z-index: 2;
+  overflow: visible;
+}
+
+/* ✅ Ensure TV remains centered on smaller screens */
+@media (max-width: 1024px) {
+  .tvWrapper {
+    padding-top: 115vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .tvWrapper {
+    padding-top: 110vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .tvWrapper {
+    padding-top: 105vh;
+  }
+}

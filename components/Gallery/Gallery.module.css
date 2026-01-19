@@ -29,6 +29,13 @@
     margin-bottom: 25px;
 }
 
+.tvContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 30px 0;
+    overflow: hidden;
+}
 .container {
     columns: 5;
     column-gap: 0.8rem;
@@ -100,7 +107,7 @@ h1.show {
     }
 }
 
-======= .gallery {
+.gallery {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -136,6 +143,7 @@ h1.show {
     transform: translateX(0);
     transition: all 1s ease;
 }
+
 
 @media screen and (max-width: 1800px) {
     .container {

@@ -15,6 +15,7 @@
     "@emailjs/browser": "^3.12.1",
     "@gsap/react": "^2.1.2",
     "@rive-app/react-canvas": "^3.0.36",
+    "@splinetool/react-spline": "^4.1.0",
     "@splinetool/runtime": "^1.9.59",
     "@vercel/analytics": "^1.5.0",
     "aos": "^3.0.0-beta.6",
@@ -48,18 +49,17 @@
     "react-spinners": "^0.13.8",
     "react-tabs": "^6.0.0",
     "react-toastify": "^10.0.4",
-    "@splinetool/react-spline": "^4.1.0",
-    "yet-another-react-lightbox": "^3.0.0",
     "react-use-scroll-direction": "^0.1.0",
     "rive-js": "^0.7.33",
     "rive-react": "^3.0.36",
     "styled-components": "^6.1.8",
-    "tailwind-merge": "^3.3.1"
+    "tailwind-merge": "^3.3.1",
+    "yet-another-react-lightbox": "^3.0.0"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.21",
+    "autoprefixer": "^10.4.23",
     "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.12"
+    "tailwindcss": "^3.4.19"
   },
   "overrides": {
     "glob": "10.5.0"
